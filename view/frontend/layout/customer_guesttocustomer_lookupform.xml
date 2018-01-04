@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © MagePal LLC. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <css src="MagePal_GuestToCustomer::css/styles.css" />
+    </head>
+    <body>
+        <!--referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">Guest Order Information</argument>
+            </action>
+        </referenceBlock-->
+        <referenceContainer name="content">
+            <block class="MagePal\GuestToCustomer\Block\Customer\LookupForm" name="customer_edit" template="MagePal_GuestToCustomer::customer/lookupform.phtml" cacheable="false">
+                <container name="form.additional.info" as="form_additional_info"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
