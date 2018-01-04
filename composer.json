@@ -1,6 +1,11 @@
 {
     "name": "magepal/magento2-guest-to-customer",
-    "description": "Quickly and easily convert existing guest magento2 order to customer",
+    "description": "Quickly and easily convert existing guest checkout customers to registered customers.",
+    "keywords": [
+        "magento 2",
+        "guest order",
+        "convert guest order"
+    ],
     "license": [
         "MagePal License"
     ],
