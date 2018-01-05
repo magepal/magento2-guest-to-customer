@@ -42,12 +42,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param $customerId
-     * @return Data
+     * @param $customerId int
+     * @param $orderId int
+     * @return $this
      */
-    public function dispatchConvertEvent($customerId)
+    public function dispatchCustomerOrderLinkEvent($customerId, $orderId)
     {
-        $this->_eventManager->dispatch('magepal_guest_to_customer_save', ['customer_id' => $customerId]);
+        $this->_eventManager->dispatch('magepal_guest_to_customer_save', [
+            'customer_id' => $customerId,
+            'order_id' => $orderId //$incrementId
+        ]);
 
         return $this;
     }

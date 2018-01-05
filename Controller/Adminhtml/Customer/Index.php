@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © MagePal LLC. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 namespace MagePal\GuestToCustomer\Controller\Adminhtml\Customer;
 
 use Magento\Backend\App\Action;
@@ -97,8 +102,6 @@ class Index extends Action
                     $this->orderCustomerService->create($orderId);
 
                     $this->messageManager->addSuccessMessage(__('Order was successfully converted.'));
-
-                    $this->helperData->dispatchConvertEvent($order->getCustomerId());
 
                     return $resultJson->setData(
                         [

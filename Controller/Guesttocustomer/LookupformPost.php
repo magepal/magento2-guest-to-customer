@@ -79,8 +79,8 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        if ($validFormKey && $this->getRequest()->isPost() && $orderId = $this->getRequest()->getPost('order_increment')) {
-            $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderId, 'eq')->create();
+        if ($validFormKey && $this->getRequest()->isPost() && $incrementId = $this->getRequest()->getPost('order_increment')) {
+            $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $incrementId, 'eq')->create();
             $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
 
             if (
@@ -91,7 +91,7 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
                 $order->setCustomerIsGuest(0);
                 $this->orderRepository->save($order);
 
-                $this->helperData->dispatchConvertEvent($this->session->getCustomerId());
+                $this->helperData->dispatchCustomerOrderLinkEvent($this->session->getCustomerId(), $incrementId);
 
                 $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
             } else {
