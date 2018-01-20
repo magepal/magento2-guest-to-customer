@@ -34,10 +34,9 @@ class OrderCustomerManagementInterfacePlugin
         callable $proceed,
         $orderId
     ) {
-
         $customer = $proceed();
 
-        if($customer && $customer->getId()){
+        if ($customer && $customer->getId()) {
             $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $orderId);
         }
 

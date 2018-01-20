@@ -109,10 +109,7 @@ class Index extends Action
                             'message' => __('Order was successfully converted.')
                         ]
                     );
-
-
                 } catch (\Exception $e) {
-
                     return $resultJson->setData(
                         [
                             'error' => true,
