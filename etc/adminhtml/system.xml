@@ -11,11 +11,11 @@
             <label>MagePal</label>
         </tab>
         <section id="guesttocustomer" translate="label" type="text" sortOrder="340" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>About Guest to Customer</label>
+            <label>Guest to Customer</label>
             <tab>magepal</tab>
             <resource>MagePal_GuestToCustomer::guesttocustomer</resource>
             <group id="about" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="0" translate="label">
-                <label>About MagePal Catalog Lazy Load Image</label>
+                <label>About Guest to Customer</label>
                 <field id="module_version" translate="label" type="label" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Module Version</label>
                     <frontend_model>MagePal\GuestToCustomer\Block\Adminhtml\System\Config\Form\Module\Version</frontend_model>
