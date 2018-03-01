@@ -1,3 +1,5 @@
+<a href="http://www.magepal.com" ><img src="https://image.ibb.co/dHBkYH/Magepal_logo.png" width="100" align="right" /></a>
+
 ## Guest to Customer for Magento2
 
 Quickly and easily convert existing guest checkout customers to registered customers. 
