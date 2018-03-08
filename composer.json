@@ -4,7 +4,10 @@
     "keywords": [
         "magento 2",
         "guest order",
-        "convert guest order"
+        "convert guest order",
+        "magento2 customer creation",
+        "convert order to customer",
+        "convert order"
     ],
     "license": [
         "proprietary"
@@ -13,7 +16,7 @@
         {
             "name": "MagePal",
             "email": "hello@magepal.com",
-            "homepage": "https://packagist.org/packages/magepal/",
+            "homepage": "http://www.magepal.com/",
             "role": "Leader"
         }
     ],
