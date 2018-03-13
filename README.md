@@ -2,8 +2,7 @@
 
 ## Guest to Customer for Magento2
 
-Quickly and easily convert existing guest checkout customers to registered customers. 
-Perfect for reordering or modifying existing order without having to manually copying all of customer existing billing and shipping information.
+Quickly and easily convert existing guest checkout customers to registered customers. Perfect for reordering or modifying existing order without having to manually copy all of your customer existing billing and shipping information.
 
 #### Customer Dashboard
 ![guest to customer - frontend](https://image.ibb.co/d7qhfx/Customer_Dashboard_Guest_to_Customer_for_Magento2.gif)
