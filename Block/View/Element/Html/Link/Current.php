@@ -2,6 +2,7 @@
 /**
  * Copyright © MagePal LLC, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ * http://www.magepal.com | support@magepal.com
  */
 namespace MagePal\GuestToCustomer\Block\View\Element\Html\Link;
 
