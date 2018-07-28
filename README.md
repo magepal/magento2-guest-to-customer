@@ -6,7 +6,7 @@ In general E-commerce, shoppers do not like to create an account during checkout
 
 Our free Guest to Customer extension for Magento2 quickly and seamlessly convert any guest order and transferred all order and customer information over as a registered customer and notifying the user on how to access their newly created customer account.
 
-A customer can also log into their existing customer's dashboard and enter any existing order that they place previously as a guest and link that order to there current customer profile providing that they use the same email address and has the order number avaiable. 
+A customer can also log into their existing customer's dashboard and enter any existing order that they place previously as a guest and link that order to there current customer profile providing that they use the same email address and has the order number available. 
 
 #### Customer Dashboard
 ![guest to customer - frontend](https://image.ibb.co/d7qhfx/Customer_Dashboard_Guest_to_Customer_for_Magento2.gif)
