@@ -61,6 +61,7 @@ class Index extends Action
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService
+     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
