@@ -116,6 +116,6 @@ class Index extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('MagePal_GuestToCustomer');
+        return $this->_authorization->isAllowed('MagePal_GuestToCustomer::guesttocustomer');
     }
 }
