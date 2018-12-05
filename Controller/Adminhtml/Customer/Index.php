@@ -2,37 +2,20 @@
 /**
  * Copyright © MagePal LLC. All rights reserved.
  * See COPYING.txt for license details.
- * http://www.magepal.com | support@magepal.com
-*/
+ * https://www.magepal.com | support@magepal.com
+ **/
 
 namespace MagePal\GuestToCustomer\Controller\Adminhtml\Customer;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 
 class Index extends Action
 {
-
-    /**
-     * @var PageFactory
-     */
-    protected $_resultPageFactory;
-
-    /**
-     * @var \MagePal\GmailSmtpApp\Helper\Data
-     */
-    protected $_dataHelper;
-
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     protected $orderRepository;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
@@ -50,37 +33,26 @@ class Index extends Action
     protected $resultJsonFactory;
 
     /**
-     * @var \MagePal\GuestToCustomer\Helper\Data
-     */
-    protected $helperData;
-
-    /**
      * Index constructor.
      * @param Context $context
-     * @param PageFactory $resultPageFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService
-     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         Context $context,
-        PageFactory $resultPageFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService,
-        \MagePal\GuestToCustomer\Helper\Data $helperData,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
-        $this->_resultPageFactory = $resultPageFactory;
         parent::__construct($context);
 
         $this->orderRepository = $orderRepository;
         $this->orderCustomerService = $orderCustomerService;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->accountManagement = $accountManagement;
-        $this->helperData = $helperData;
     }
 
     /**
