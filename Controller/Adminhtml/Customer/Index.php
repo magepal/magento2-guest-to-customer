@@ -33,19 +33,26 @@ class Index extends Action
     protected $resultJsonFactory;
 
     /**
+     * @var \MagePal\GuestToCustomer\Helper\Data
+     */
+    protected $helperData;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
      */
     public function __construct(
         Context $context,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \MagePal\GuestToCustomer\Helper\Data $helperData
     ) {
         parent::__construct($context);
 
@@ -53,6 +60,7 @@ class Index extends Action
         $this->orderCustomerService = $orderCustomerService;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->accountManagement = $accountManagement;
+        $this->helperData = $helperData;
     }
 
     /**
@@ -73,7 +81,11 @@ class Index extends Action
 
             if ($order->getEntityId() && $this->accountManagement->isEmailAvailable($order->getEmailAddress())) {
                 try {
-                    $this->orderCustomerService->create($orderId);
+                    $customer = $this->orderCustomerService->create($orderId);
+
+                    if ($customer && $customer->getId()) {
+                        $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
+                    }
 
                     $this->messageManager->addSuccessMessage(__('Order was successfully converted.'));
 

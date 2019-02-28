@@ -29,7 +29,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isEnabled()
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -39,7 +42,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isEnabledCustomerDashbard()
     {
-        return $this->isEnabled() && $this->scopeConfig->getValue(self::XML_CUSTOMER_DASHBOARD, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->isEnabled() && $this->scopeConfig->getValue(
+            self::XML_CUSTOMER_DASHBOARD,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -51,7 +57,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $this->_eventManager->dispatch('magepal_guest_to_customer_save', [
             'customer_id' => $customerId,
-            'order_id' => $orderId //$incrementId
+            'order_id' => $orderId, //incrementId
+            'increment_id' => $orderId //$incrementId
         ]);
 
         return $this;

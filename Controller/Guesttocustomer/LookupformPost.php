@@ -49,6 +49,10 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
+     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Context $context,
@@ -80,12 +84,19 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        if ($validFormKey && $this->getRequest()->isPost() && $incrementId = $this->getRequest()->getPost('order_increment')) {
-            $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $incrementId, 'eq')->create();
+        if ($validFormKey
+            && $this->getRequest()->isPost()
+            && $incrementId = $this->getRequest()->getPost('order_increment')
+        ) {
+            $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+                'increment_id',
+                $incrementId,
+                'eq'
+            )->create();
+
             $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
 
-            if (
-                $order->getId() && !$order->getCustomerId()
+            if ($order->getId() && !$order->getCustomerId()
                 && $order->getCustomerEmail() === $this->session->getCustomer()->getEmail()
             ) {
                 $order->setCustomerId($this->session->getCustomerId());
