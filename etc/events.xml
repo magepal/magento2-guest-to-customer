@@ -8,6 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="magepal_guest_to_customer_save">
         <observer name="magepal_guest_to_customer_save_downloadable_product"
-                  instance="Magepal\GuestToCustomer\Observer\UpdateDownloadableProductObserver" />
+                  instance="MagePal\GuestToCustomer\Observer\UpdateDownloadableProductObserver" />
     </event>
 </config>
