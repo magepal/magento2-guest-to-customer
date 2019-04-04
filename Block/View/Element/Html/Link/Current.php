@@ -2,28 +2,37 @@
 /**
  * Copyright © MagePal LLC, Inc. All rights reserved.
  * See COPYING.txt for license details.
- * http://www.magepal.com | support@magepal.com
+ * https://www.magepal.com | support@magepal.com
  */
 namespace MagePal\GuestToCustomer\Block\View\Element\Html\Link;
 
+use Magento\Framework\App\DefaultPathInterface;
+use Magento\Framework\View\Element\Template\Context;
+use MagePal\GuestToCustomer\Helper\Data;
+
+/**
+ * Class Current
+ * @package MagePal\GuestToCustomer\Block\View\Element\Html\Link
+ */
 class Current extends \Magento\Framework\View\Element\Html\Link\Current
 {
 
-    /* @var \MagePal\GuestToCustomer\Helper\Data*/
+    /* @var Data*/
     protected $helperData;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
+     * @param Context $context
+     * @param DefaultPathInterface $defaultPath
      * @param array $data
+     * @param Data $helperData
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\DefaultPathInterface $defaultPath,
+        Context $context,
+        DefaultPathInterface $defaultPath,
         array $data = [],
-        \MagePal\GuestToCustomer\Helper\Data $helperData
+        Data $helperData
     ) {
         parent::__construct($context, $defaultPath, $data);
         $this->helperData = $helperData;

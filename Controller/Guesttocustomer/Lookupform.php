@@ -2,20 +2,29 @@
 /**
  * Copyright © MagePal LLC. All rights reserved.
  * See COPYING.txt for license details.
- * http://www.magepal.com | support@magepal.com
-*/
+ * https://www.magepal.com | support@magepal.com
+ */
 namespace MagePal\GuestToCustomer\Controller\Guesttocustomer;
 
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use MagePal\GuestToCustomer\Helper\Data;
 
-class Lookupform extends \Magento\Customer\Controller\AbstractAccount
+/**
+ * Class Lookupform
+ * @package MagePal\GuestToCustomer\Controller\Guesttocustomer
+ */
+class Lookupform extends AbstractAccount
 {
     /**
-     * @var \MagePal\GuestToCustomer\Helper\Data
+     * @var Data
      */
     protected $helperData;
 
@@ -33,12 +42,13 @@ class Lookupform extends \Magento\Customer\Controller\AbstractAccount
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
-        \MagePal\GuestToCustomer\Helper\Data $helperData
+        Data $helperData
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->session = $customerSession;
@@ -50,11 +60,11 @@ class Lookupform extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Customer login form page
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return Redirect|Page
      */
     public function execute()
     {
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         // $title = __('Guest to customer');
 
@@ -68,12 +78,16 @@ class Lookupform extends \Magento\Customer\Controller\AbstractAccount
      * @param RequestInterface $request
      *
      * @return ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
         if (!$this->helperData->isEnabledCustomerDashbard() || !$this->session->isLoggedIn()) {
-            $this->_redirect('customer/account/login');
+            /** @var Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('customer/account/login');
+
+            return $resultRedirect;
         }
 
         return parent::dispatch($request);

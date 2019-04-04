@@ -2,21 +2,32 @@
 /**
  * Copyright © MagePal LLC. All rights reserved.
  * See COPYING.txt for license details.
- * http://www.magepal.com | support@magepal.com
-*/
+ * https://www.magepal.com | support@magepal.com
+ */
 namespace MagePal\GuestToCustomer\Controller\Guesttocustomer;
 
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use MagePal\GuestToCustomer\Helper\Data;
 
-class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
+/**
+ * Class LookupformPost
+ * @package MagePal\GuestToCustomer\Controller\Guesttocustomer
+ */
+class LookupformPost extends AbstractAccount
 {
     /**
-     * @var \MagePal\GuestToCustomer\Helper\Data
+     * @var Data
      */
     protected $helperData;
 
@@ -31,7 +42,7 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     protected $orderRepository;
 
@@ -41,7 +52,7 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
     protected $formKeyValidator;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -49,18 +60,18 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
-     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Data $helperData
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Validator $formKeyValidator
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
-        \MagePal\GuestToCustomer\Helper\Data $helperData,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        Data $helperData,
+        OrderRepositoryInterface $orderRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         Validator $formKeyValidator
     ) {
         $this->resultPageFactory = $resultPageFactory;
@@ -76,11 +87,11 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Customer login form page
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return Redirect|Page
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
@@ -120,12 +131,16 @@ class LookupformPost extends \Magento\Customer\Controller\AbstractAccount
      * @param RequestInterface $request
      *
      * @return ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
         if (!$this->helperData->isEnabledCustomerDashbard() || !$this->session->isLoggedIn()) {
-            $this->_redirect('customer/account/login');
+            /** @var Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('customer/account/login');
+
+            return $resultRedirect;
         }
 
         return parent::dispatch($request);

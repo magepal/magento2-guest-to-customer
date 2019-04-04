@@ -2,33 +2,39 @@
 /**
  * Copyright © MagePal LLC. All rights reserved.
  * See COPYING.txt for license details.
- * http://www.magepal.com | support@magepal.com
+ * https://www.magepal.com | support@magepal.com
  */
 
 namespace MagePal\GuestToCustomer\Observer;
 
+use Exception;
+use Magento\Downloadable\Model\Link\PurchasedFactory;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class UpdateDownloadableProductObserver
+ * @package MagePal\GuestToCustomer\Observer
+ */
 class UpdateDownloadableProductObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Downloadable\Model\Link\PurchasedFactory
+     * @var PurchasedFactory
      */
     protected $purchasedFactory;
 
     /**
-     * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
+     * @param PurchasedFactory $purchasedFactory
      */
     public function __construct(
-        \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
+        PurchasedFactory $purchasedFactory
     ) {
         $this->purchasedFactory = $purchasedFactory;
     }
 
     /**
      * @param EventObserver $observer
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute(EventObserver $observer)
     {
@@ -47,7 +53,7 @@ class UpdateDownloadableProductObserver implements ObserverInterface
                     $purchased->save();
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //do nothing
         }
     }

@@ -7,52 +7,65 @@
 
 namespace MagePal\GuestToCustomer\Controller\Adminhtml\Customer;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderCustomerManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use MagePal\GuestToCustomer\Helper\Data;
 
+/**
+ * Class Index
+ * @package MagePal\GuestToCustomer\Controller\Adminhtml\Customer
+ */
 class Index extends Action
 {
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     protected $orderRepository;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @var AccountManagementInterface
      */
     protected $accountManagement;
 
     /**
-     * @var \Magento\Sales\Api\OrderCustomerManagementInterface
+     * @var OrderCustomerManagementInterface
      */
     protected $orderCustomerService;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \MagePal\GuestToCustomer\Helper\Data
+     * @var Data
      */
     protected $helperData;
 
     /**
      * Index constructor.
      * @param Context $context
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
-     * @param \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
+     * @param OrderRepositoryInterface $orderRepository
+     * @param AccountManagementInterface $accountManagement
+     * @param OrderCustomerManagementInterface $orderCustomerService
+     * @param JsonFactory $resultJsonFactory
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
-        \Magento\Sales\Api\OrderCustomerManagementInterface $orderCustomerService,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \MagePal\GuestToCustomer\Helper\Data $helperData
+        OrderRepositoryInterface $orderRepository,
+        AccountManagementInterface $accountManagement,
+        OrderCustomerManagementInterface $orderCustomerService,
+        JsonFactory $resultJsonFactory,
+        Data $helperData
     ) {
         parent::__construct($context);
 
@@ -65,9 +78,9 @@ class Index extends Action
 
     /**
      * Index action
-     * @return \Magento\Framework\Controller\Result\Json
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Json
+     * @throws Exception
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -76,7 +89,7 @@ class Index extends Action
         $resultJson = $this->resultJsonFactory->create();
 
         if ($orderId) {
-            /** @var  $order \Magento\Sales\Api\Data\OrderInterface */
+            /** @var  $order OrderInterface */
             $order = $this->orderRepository->get($orderId);
 
             if ($order->getEntityId() && $this->accountManagement->isEmailAvailable($order->getEmailAddress())) {
@@ -95,7 +108,7 @@ class Index extends Action
                             'message' => __('Order was successfully converted.')
                         ]
                     );
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return $resultJson->setData(
                         [
                             'error' => true,

@@ -2,28 +2,38 @@
 /**
  * Copyright © MagePal LLC. All rights reserved.
  * See COPYING.txt for license details.
- * http://www.magepal.com | support@magepal.com
-*/
+ * https://www.magepal.com | support@magepal.com
+ */
 
 namespace MagePal\GuestToCustomer\Block\Customer;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
-class LookupForm extends \Magento\Framework\View\Element\Template
+/**
+ * Class LookupForm
+ * @package MagePal\GuestToCustomer\Block\Customer
+ */
+class LookupForm extends Template
 {
     /**
-     * @var \Magento\Newsletter\Model\Subscriber
+     * @var Subscriber
      */
     protected $subscription;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @var SubscriberFactory
      */
     protected $subscriberFactory;
 
@@ -37,10 +47,19 @@ class LookupForm extends \Magento\Framework\View\Element\Template
      */
     protected $customerAccountManagement;
 
+    /**
+     * LookupForm constructor.
+     * @param Context $context
+     * @param Session $customerSession
+     * @param SubscriberFactory $subscriberFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param array $data
+     */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        Context $context,
+        Session $customerSession,
+        SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         array $data = []
@@ -55,7 +74,7 @@ class LookupForm extends \Magento\Framework\View\Element\Template
     /**
      * Return the Customer given the customer Id stored in the session.
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      */
     public function getCustomer()
     {
