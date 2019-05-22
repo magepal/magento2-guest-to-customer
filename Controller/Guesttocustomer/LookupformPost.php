@@ -106,12 +106,22 @@ class LookupformPost extends AbstractAccount
             )->create();
 
             $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
+            $customer = $this->session->getCustomer();
 
             if ($order->getId() && !$order->getCustomerId()
-                && $order->getCustomerEmail() === $this->session->getCustomer()->getEmail()
+                && $order->getCustomerEmail() === $customer->getEmail()
             ) {
-                $order->setCustomerId($this->session->getCustomerId());
+                $order->setCustomerId($customer->getId());
                 $order->setCustomerIsGuest(0);
+                $order->setCustomerGroupId($customer->getGroupId());
+                $order->setCustomerDob($customer->getDob());
+                $order->setCustomerFirstname($customer->getFirstname());
+                $order->setCustomerLastname($customer->getLastname());
+                $order->setCustomerMiddlename($customer->getMiddlename());
+                $order->setCustomerPrefix($customer->getPrefix());
+                $order->setCustomerSuffix($customer->getSuffix());
+                $order->setCustomerTaxvat($customer->getTaxvat());
+                $order->setCustomerGender($customer->getGender());
                 $this->orderRepository->save($order);
 
                 $this->helperData->dispatchCustomerOrderLinkEvent($this->session->getCustomerId(), $incrementId);
