@@ -111,20 +111,13 @@ class LookupformPost extends AbstractAccount
                 $customer = $this->session->getCustomer();
 
                 if (!$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
-                    $order->setCustomerId($customer->getId());
-                    $order->setCustomerIsGuest(0);
-                    $order->setCustomerGroupId($customer->getGroupId());
-                    $order->setCustomerDob($customer->getDob());
-                    $order->setCustomerFirstname($customer->getFirstname());
-                    $order->setCustomerLastname($customer->getLastname());
-                    $order->setCustomerMiddlename($customer->getMiddlename());
-                    $order->setCustomerPrefix($customer->getPrefix());
-                    $order->setCustomerSuffix($customer->getSuffix());
-                    $order->setCustomerTaxvat($customer->getTaxvat());
-                    $order->setCustomerGender($customer->getGender());
+                    $this->helperData->setCustomerData($order, $customer);
 
-                    $history = $order->addStatusHistoryComment(__('Guest order converted.'));
-                    $history->save();
+                    $comment = sprintf(
+                        __("Guest order converted by customer: %s"),
+                        $customer->getEmail()
+                    );
+                    $order->addStatusHistoryComment($comment);
 
                     $this->orderRepository->save($order);
 

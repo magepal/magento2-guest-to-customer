@@ -10,6 +10,7 @@ namespace MagePal\GuestToCustomer\Controller\Adminhtml\Customer;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -57,6 +58,11 @@ class Index extends Action
     protected $helperData;
 
     /**
+     * @var Session
+     */
+    private $authSession;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param OrderRepositoryInterface $orderRepository
@@ -73,6 +79,7 @@ class Index extends Action
         CustomerRepositoryInterface $customerRepository,
         OrderCustomerManagementInterface $orderCustomerService,
         JsonFactory $resultJsonFactory,
+        Session $authSession,
         Data $helperData
     ) {
         parent::__construct($context);
@@ -82,6 +89,7 @@ class Index extends Action
         $this->resultJsonFactory = $resultJsonFactory;
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
+        $this->authSession = $authSession;
         $this->helperData = $helperData;
     }
 
@@ -106,30 +114,19 @@ class Index extends Action
                     $customer = $this->orderCustomerService->create($orderId);
                 } else {
                     $customer = $this->customerRepository->get($order->getCustomerEmail());
-
-                    $order->setCustomerId($customer->getId());
-                    $order->setCustomerIsGuest(0);
-                    $this->orderRepository->save($order);
                 }
 
-                if ($customer && $customer->getId()) {
-                    $order->setCustomerGroupId($customer->getGroupId());
-                    $order->setCustomerDob($customer->getDob());
-                    $order->setCustomerFirstname($customer->getFirstname());
-                    $order->setCustomerLastname($customer->getLastname());
-                    $order->setCustomerMiddlename($customer->getMiddlename());
-                    $order->setCustomerPrefix($customer->getPrefix());
-                    $order->setCustomerSuffix($customer->getSuffix());
-                    $order->setCustomerTaxvat($customer->getTaxvat());
-                    $order->setCustomerGender($customer->getGender());
+                $this->helperData->setCustomerData($order, $customer);
 
-                    $history = $order->addStatusHistoryComment(__('Guest order converted.'));
-                    $history->save();
+                $comment = sprintf(
+                    __("Guest order converted by admin: %s"),
+                    $this->authSession->getUser()->getUserName()
+                );
+                $order->addStatusHistoryComment($comment);
 
-                    $this->orderRepository->save($order);
+                $this->orderRepository->save($order);
 
-                    $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
-                }
+                $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
 
                 $this->messageManager->addSuccessMessage(__('Order was successfully converted.'));
 
