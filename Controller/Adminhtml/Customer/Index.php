@@ -97,58 +97,49 @@ class Index extends Action
         $orderId = $request->getPost('order_id', null);
         $resultJson = $this->resultJsonFactory->create();
 
-        if ($orderId) {
-            /** @var  $order OrderInterface */
-            $order = $this->orderRepository->get($orderId);
+        /** @var  $order OrderInterface */
+        $order = $this->orderRepository->get($orderId);
 
-            if ($order->getEntityId()) {
-                try {
-                    if ($this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
-                        $customer = $this->orderCustomerService->create($orderId);
-                    } else {
-                        $customer = $this->customerRepository->get($order->getCustomerEmail());
+        if ($orderId && $order->getEntityId()) {
+            try {
+                if ($this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
+                    $customer = $this->orderCustomerService->create($orderId);
+                } else {
+                    $customer = $this->customerRepository->get($order->getCustomerEmail());
 
-                        $order->setCustomerId($customer->getId());
-                        $order->setCustomerIsGuest(0);
-                        $this->orderRepository->save($order);
-                    }
-
-                    if ($customer && $customer->getId()) {
-                        $order->setCustomerGroupId($customer->getGroupId());
-                        $order->setCustomerDob($customer->getDob());
-                        $order->setCustomerFirstname($customer->getFirstname());
-                        $order->setCustomerLastname($customer->getLastname());
-                        $order->setCustomerMiddlename($customer->getMiddlename());
-                        $order->setCustomerPrefix($customer->getPrefix());
-                        $order->setCustomerSuffix($customer->getSuffix());
-                        $order->setCustomerTaxvat($customer->getTaxvat());
-                        $order->setCustomerGender($customer->getGender());
-                        $this->orderRepository->save($order);
-
-                        $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
-                    }
-
-                    $this->messageManager->addSuccessMessage(__('Order was successfully converted.'));
-
-                    return $resultJson->setData(
-                        [
-                            'error' => false,
-                            'message' => __('Order was successfully converted.')
-                        ]
-                    );
-                } catch (Exception $e) {
-                    return $resultJson->setData(
-                        [
-                            'error' => true,
-                            'message' => $e->getMessage()
-                        ]
-                    );
+                    $order->setCustomerId($customer->getId());
+                    $order->setCustomerIsGuest(0);
+                    $this->orderRepository->save($order);
                 }
-            } else {
+
+                if ($customer && $customer->getId()) {
+                    $order->setCustomerGroupId($customer->getGroupId());
+                    $order->setCustomerDob($customer->getDob());
+                    $order->setCustomerFirstname($customer->getFirstname());
+                    $order->setCustomerLastname($customer->getLastname());
+                    $order->setCustomerMiddlename($customer->getMiddlename());
+                    $order->setCustomerPrefix($customer->getPrefix());
+                    $order->setCustomerSuffix($customer->getSuffix());
+                    $order->setCustomerTaxvat($customer->getTaxvat());
+                    $order->setCustomerGender($customer->getGender());
+                    $this->orderRepository->save($order);
+
+                    $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
+                }
+
+                $this->messageManager->addSuccessMessage(__('Order was successfully converted.'));
+
+                return $resultJson->setData(
+                    [
+                        'error' => false,
+                        'message' => __('Order was successfully converted.')
+                    ]
+                );
+            } catch (Exception $e) {
                 return $resultJson->setData(
                     [
                         'error' => true,
-                        'message' => __('Email address already belongs to an existing customer.')
+                        'message' => $e->getMessage()
                     ]
                 );
             }
