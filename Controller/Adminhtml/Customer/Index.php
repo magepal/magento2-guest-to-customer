@@ -11,6 +11,7 @@ use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -36,6 +37,11 @@ class Index extends Action
     protected $accountManagement;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @var OrderCustomerManagementInterface
      */
     protected $orderCustomerService;
@@ -55,6 +61,7 @@ class Index extends Action
      * @param Context $context
      * @param OrderRepositoryInterface $orderRepository
      * @param AccountManagementInterface $accountManagement
+     * @param CustomerRepositoryInterface $customerRepository
      * @param OrderCustomerManagementInterface $orderCustomerService
      * @param JsonFactory $resultJsonFactory
      * @param Data $helperData
@@ -63,6 +70,7 @@ class Index extends Action
         Context $context,
         OrderRepositoryInterface $orderRepository,
         AccountManagementInterface $accountManagement,
+        CustomerRepositoryInterface $customerRepository,
         OrderCustomerManagementInterface $orderCustomerService,
         JsonFactory $resultJsonFactory,
         Data $helperData
@@ -73,6 +81,7 @@ class Index extends Action
         $this->orderCustomerService = $orderCustomerService;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->accountManagement = $accountManagement;
+        $this->customerRepository = $customerRepository;
         $this->helperData = $helperData;
     }
 
@@ -92,11 +101,30 @@ class Index extends Action
             /** @var  $order OrderInterface */
             $order = $this->orderRepository->get($orderId);
 
-            if ($order->getEntityId() && $this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
+            if ($order->getEntityId()) {
                 try {
-                    $customer = $this->orderCustomerService->create($orderId);
+                    if ($this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
+                        $customer = $this->orderCustomerService->create($orderId);
+                    } else {
+                        $customer = $this->customerRepository->get($order->getCustomerEmail());
+
+                        $order->setCustomerId($customer->getId());
+                        $order->setCustomerIsGuest(0);
+                        $this->orderRepository->save($order);
+                    }
 
                     if ($customer && $customer->getId()) {
+                        $order->setCustomerGroupId($customer->getGroupId());
+                        $order->setCustomerDob($customer->getDob());
+                        $order->setCustomerFirstname($customer->getFirstname());
+                        $order->setCustomerLastname($customer->getLastname());
+                        $order->setCustomerMiddlename($customer->getMiddlename());
+                        $order->setCustomerPrefix($customer->getPrefix());
+                        $order->setCustomerSuffix($customer->getSuffix());
+                        $order->setCustomerTaxvat($customer->getTaxvat());
+                        $order->setCustomerGender($customer->getGender());
+                        $this->orderRepository->save($order);
+
                         $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
                     }
 
