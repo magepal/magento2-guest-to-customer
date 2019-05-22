@@ -120,7 +120,7 @@ class Index extends Action
                 return $resultJson->setData(
                     [
                         'error' => true,
-                        'message' => __('Email address already belong to an existing customer.')
+                        'message' => __('Email address already belongs to an existing customer.')
                     ]
                 );
             }
