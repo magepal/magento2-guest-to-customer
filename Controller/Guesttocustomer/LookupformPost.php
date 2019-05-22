@@ -122,6 +122,10 @@ class LookupformPost extends AbstractAccount
                     $order->setCustomerSuffix($customer->getSuffix());
                     $order->setCustomerTaxvat($customer->getTaxvat());
                     $order->setCustomerGender($customer->getGender());
+
+                    $history = $order->addStatusHistoryComment(__('Guest order converted.'));
+                    $history->save();
+
                     $this->orderRepository->save($order);
 
                     $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $incrementId);
