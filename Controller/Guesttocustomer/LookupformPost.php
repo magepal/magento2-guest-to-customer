@@ -106,32 +106,35 @@ class LookupformPost extends AbstractAccount
             )->create();
 
             $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
-            $customer = $this->session->getCustomer();
 
-            if ($order->getId() && !$order->getCustomerId()
-                && $order->getCustomerEmail() === $customer->getEmail()
-            ) {
-                $order->setCustomerId($customer->getId());
-                $order->setCustomerIsGuest(0);
-                $order->setCustomerGroupId($customer->getGroupId());
-                $order->setCustomerDob($customer->getDob());
-                $order->setCustomerFirstname($customer->getFirstname());
-                $order->setCustomerLastname($customer->getLastname());
-                $order->setCustomerMiddlename($customer->getMiddlename());
-                $order->setCustomerPrefix($customer->getPrefix());
-                $order->setCustomerSuffix($customer->getSuffix());
-                $order->setCustomerTaxvat($customer->getTaxvat());
-                $order->setCustomerGender($customer->getGender());
-                $this->orderRepository->save($order);
+            if ($order->getId()) {
+                $customer = $this->session->getCustomer();
 
-                $this->helperData->dispatchCustomerOrderLinkEvent($this->session->getCustomerId(), $incrementId);
+                if (!$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
+                    $order->setCustomerId($customer->getId());
+                    $order->setCustomerIsGuest(0);
+                    $order->setCustomerGroupId($customer->getGroupId());
+                    $order->setCustomerDob($customer->getDob());
+                    $order->setCustomerFirstname($customer->getFirstname());
+                    $order->setCustomerLastname($customer->getLastname());
+                    $order->setCustomerMiddlename($customer->getMiddlename());
+                    $order->setCustomerPrefix($customer->getPrefix());
+                    $order->setCustomerSuffix($customer->getSuffix());
+                    $order->setCustomerTaxvat($customer->getTaxvat());
+                    $order->setCustomerGender($customer->getGender());
+                    $this->orderRepository->save($order);
 
-                $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
+                    $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $incrementId);
+
+                    $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
+                } else {
+                    $this->messageManager->addErrorMessage(__('Order was not placed by you.'));
+                }
             } else {
-                $this->messageManager->addErrorMessage(__('Unknown error please try again.'));
+                $this->messageManager->addErrorMessage(__('We can\'t find the order.'));
             }
         } else {
-            $this->messageManager->addErrorMessage(__('We can\'t find the order.'));
+            $this->messageManager->addErrorMessage(__('Unknown error please try again.'));
         }
 
         return $resultRedirect->setPath('*/*/lookupform');
