@@ -92,7 +92,7 @@ class Index extends Action
             /** @var  $order OrderInterface */
             $order = $this->orderRepository->get($orderId);
 
-            if ($order->getEntityId() && $this->accountManagement->isEmailAvailable($order->getEmailAddress())) {
+            if ($order->getEntityId() && $this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
                 try {
                     $customer = $this->orderCustomerService->create($orderId);
 
