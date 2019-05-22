@@ -108,7 +108,7 @@ class LookupformPost extends AbstractAccount
             $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
 
             if ($order->getId()) {
-                $customer = $this->session->getCustomer();
+                $customer = $this->session->getCustomerData();
 
                 if (!$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
                     $this->helperData->setCustomerData($order, $customer);
