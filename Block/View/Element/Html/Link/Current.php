@@ -45,7 +45,7 @@ class Current extends \Magento\Framework\View\Element\Html\Link\Current
      */
     protected function _toHtml()
     {
-        if ($this->helperData->isEnabledCustomerDashbard()) {
+        if ($this->helperData->isEnabledCustomerDashboard()) {
             return parent::_toHtml();
         }
 

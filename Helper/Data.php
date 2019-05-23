@@ -47,7 +47,7 @@ class Data extends AbstractHelper
      *
      * @return bool
      */
-    public function isEnabledCustomerDashbard()
+    public function isEnabledCustomerDashboard()
     {
         return $this->isEnabled() && $this->scopeConfig->getValue(
             self::XML_CUSTOMER_DASHBOARD,
