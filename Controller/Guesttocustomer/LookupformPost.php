@@ -107,21 +107,31 @@ class LookupformPost extends AbstractAccount
 
             $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
 
-            if ($order->getId() && !$order->getCustomerId()
-                && $order->getCustomerEmail() === $this->session->getCustomer()->getEmail()
-            ) {
-                $order->setCustomerId($this->session->getCustomerId());
-                $order->setCustomerIsGuest(0);
-                $this->orderRepository->save($order);
+            if ($order->getId()) {
+                $customer = $this->session->getCustomerData();
 
-                $this->helperData->dispatchCustomerOrderLinkEvent($this->session->getCustomerId(), $incrementId);
+                if (!$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
+                    $this->helperData->setCustomerData($order, $customer);
 
-                $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
+                    $comment = sprintf(
+                        __("Guest order converted by customer: %s"),
+                        $customer->getEmail()
+                    );
+                    $order->addStatusHistoryComment($comment);
+
+                    $this->orderRepository->save($order);
+
+                    $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $incrementId);
+
+                    $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
+                } else {
+                    $this->messageManager->addErrorMessage(__('Order was not placed by you.'));
+                }
             } else {
-                $this->messageManager->addErrorMessage(__('Unknown error please try again.'));
+                $this->messageManager->addErrorMessage(__('We can\'t find the order.'));
             }
         } else {
-            $this->messageManager->addErrorMessage(__('We can\'t find the order.'));
+            $this->messageManager->addErrorMessage(__('Unknown error please try again.'));
         }
 
         return $resultRedirect->setPath('*/*/lookupform');
@@ -135,7 +145,7 @@ class LookupformPost extends AbstractAccount
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->helperData->isEnabledCustomerDashbard() || !$this->session->isLoggedIn()) {
+        if (!$this->helperData->isEnabledCustomerDashboard() || !$this->session->isLoggedIn()) {
             /** @var Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('customer/account/login');

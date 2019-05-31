@@ -82,7 +82,7 @@ class Lookupform extends AbstractAccount
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->helperData->isEnabledCustomerDashbard() || !$this->session->isLoggedIn()) {
+        if (!$this->helperData->isEnabledCustomerDashboard() || !$this->session->isLoggedIn()) {
             /** @var Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('customer/account/login');
