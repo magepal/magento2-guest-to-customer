@@ -70,6 +70,7 @@ class Index extends Action
      * @param CustomerRepositoryInterface $customerRepository
      * @param OrderCustomerManagementInterface $orderCustomerService
      * @param JsonFactory $resultJsonFactory
+     * @param Session $authSession
      * @param Data $helperData
      */
     public function __construct(
@@ -96,8 +97,6 @@ class Index extends Action
     /**
      * Index action
      * @return Json
-     * @throws Exception
-     * @throws LocalizedException
      */
     public function execute()
     {
@@ -112,16 +111,21 @@ class Index extends Action
             try {
                 if ($this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
                     $customer = $this->orderCustomerService->create($orderId);
-                } else {
+                } elseif ($this->helperData->isMergeIfCustomerAlreadyExists()) {
                     $customer = $this->customerRepository->get($order->getCustomerEmail());
+                } else {
+                    return $resultJson->setData(
+                        $this->getMessage(true, 'Customer with email address already exists')
+                    );
                 }
 
                 $this->helperData->setCustomerData($order, $customer);
 
                 $comment = sprintf(
-                    __("Guest order converted by admin: %s"),
+                    __("Guest order converted by admin user: %s"),
                     $this->authSession->getUser()->getUserName()
                 );
+
                 $order->addStatusHistoryComment($comment);
 
                 $this->orderRepository->save($order);
@@ -130,27 +134,12 @@ class Index extends Action
 
                 $this->messageManager->addSuccessMessage(__('Order was successfully converted.'));
 
-                return $resultJson->setData(
-                    [
-                        'error' => false,
-                        'message' => __('Order was successfully converted.')
-                    ]
-                );
+                return $resultJson->setData($this->getMessage(false, 'Order was successfully converted.'));
             } catch (Exception $e) {
-                return $resultJson->setData(
-                    [
-                        'error' => true,
-                        'message' => $e->getMessage()
-                    ]
-                );
+                return $resultJson->setData($this->getMessage(true, $e->getMessage()));
             }
         } else {
-            return $resultJson->setData(
-                [
-                    'error' => true,
-                    'message' => __('Invalid order id.')
-                ]
-            );
+            return $resultJson->setData($this->getMessage(true, 'Invalid order id.'));
         }
     }
 
@@ -162,5 +151,13 @@ class Index extends Action
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('MagePal_GuestToCustomer::guesttocustomer');
+    }
+
+    protected function getMessage($hasError, $message)
+    {
+        return [
+            'error' => $hasError,
+            'message' => __($message)
+        ];
     }
 }

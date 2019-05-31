@@ -14,9 +14,15 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class Data extends AbstractHelper {
+/**
+ * Class Data
+ * @package MagePal\GuestToCustomer\Helper
+ */
+class Data extends AbstractHelper
+{
     const XML_PATH_ACTIVE = 'guesttocustomer/general/active';
     const XML_CUSTOMER_DASHBOARD = 'guesttocustomer/general/customer_dashboard';
+    const XML_CUSTOMER_ALREADY_EXISTS = 'guesttocustomer/general/merge_customer_already_exists';
 
     const XML_MERGE_CUSTOMER_GROUP = 'guesttocustomer/merge/group';
     const XML_MERGE_CUSTOMER_NAME = 'guesttocustomer/merge/name';
@@ -39,8 +45,9 @@ class Data extends AbstractHelper {
      *
      * @return bool
      */
-    public function isEnabled() {
-        return $this->_isEnabled(self::XML_PATH_ACTIVE);
+    public function isEnabled()
+    {
+        return $this->isConfigEnabled(self::XML_PATH_ACTIVE);
     }
 
     /**
@@ -48,8 +55,18 @@ class Data extends AbstractHelper {
      *
      * @return bool
      */
-    public function isEnabledCustomerDashboard() {
-        return $this->isEnabled() && $this->_isEnabled(self::XML_CUSTOMER_DASHBOARD);
+    public function isEnabledCustomerDashboard()
+    {
+        return $this->isEnabled() && $this->isConfigEnabled(self::XML_CUSTOMER_DASHBOARD);
+    }
+
+    /**
+     * Automatically add order to existing customer with same email address.
+     * @return bool
+     */
+    public function isMergeIfCustomerAlreadyExists()
+    {
+        return $this->isConfigEnabled(self::XML_CUSTOMER_ALREADY_EXISTS);
     }
 
     /**
@@ -57,7 +74,8 @@ class Data extends AbstractHelper {
      * @param $orderId int
      * @return $this
      */
-    public function dispatchCustomerOrderLinkEvent($customerId, $orderId) {
+    public function dispatchCustomerOrderLinkEvent($customerId, $orderId)
+    {
         $this->_eventManager->dispatch('magepal_guest_to_customer_save', [
             'customer_id' => $customerId,
             'order_id' => $orderId, //incrementId
@@ -71,15 +89,16 @@ class Data extends AbstractHelper {
      * @param $order OrderInterface
      * @param $customer CustomerInterface
      */
-    public function setCustomerData(OrderInterface $order, CustomerInterface $customer) {
+    public function setCustomerData(OrderInterface $order, CustomerInterface $customer)
+    {
         $order->setCustomerIsGuest(0);
         $order->setCustomerId($customer->getId());
 
-        if ($this->_isEnabled(self::XML_MERGE_CUSTOMER_GROUP)) {
+        if ($this->isConfigEnabled(self::XML_MERGE_CUSTOMER_GROUP)) {
             $order->setCustomerGroupId($customer->getGroupId());
         }
 
-        if ($this->_isEnabled(self::XML_MERGE_CUSTOMER_NAME)) {
+        if ($this->isConfigEnabled(self::XML_MERGE_CUSTOMER_NAME)) {
             $order->setCustomerPrefix($customer->getPrefix());
 
             $order->setCustomerFirstname($customer->getFirstname());
@@ -89,15 +108,15 @@ class Data extends AbstractHelper {
             $order->setCustomerSuffix($customer->getSuffix());
         }
 
-        if ($this->_isEnabled(self::XML_MERGE_CUSTOMER_DOB)) {
+        if ($this->isConfigEnabled(self::XML_MERGE_CUSTOMER_DOB)) {
             $order->setCustomerDob($customer->getDob());
         }
 
-        if ($this->_isEnabled(self::XML_MERGE_CUSTOMER_GENDER)) {
+        if ($this->isConfigEnabled(self::XML_MERGE_CUSTOMER_GENDER)) {
             $order->setCustomerGender($customer->getGender());
         }
 
-        if ($this->_isEnabled(self::XML_MERGE_CUSTOMER_TAXVAT)) {
+        if ($this->isConfigEnabled(self::XML_MERGE_CUSTOMER_TAXVAT)) {
             $order->setCustomerTaxvat($customer->getTaxvat());
         }
     }
@@ -107,7 +126,8 @@ class Data extends AbstractHelper {
      *
      * @return boolean
      */
-    protected function _isEnabled($xmlPath) {
+    protected function isConfigEnabled($xmlPath)
+    {
         return $this->scopeConfig->isSetFlag(
             $xmlPath,
             ScopeInterface::SCOPE_STORE

@@ -1,6 +1,14 @@
 <a href="https://www.magepal.com" title="Magento 2.0 Extensions" ><img src="https://image.ibb.co/dHBkYH/Magepal_logo.png" width="100" align="right" alt="Magento Extensions for Ecommerce" /></a>
 
-## Guest to Customer for Magento 2.0 
+## Guest to Customer for Magento 2.0
+
+
+[![Total Downloads](https://poser.pugx.org/magepal/magento2-guest-to-customer/downloads)](https://www.magepal.com/guest-to-customer.html)
+[![Latest Stable Version](https://poser.pugx.org/magepal/magento2-guest-to-customer/v/stable)](https://www.magepal.com/guest-to-customer.html)
+[![GitHub stars](https://img.shields.io/github/stars/magepal/magento2-guest-to-customer.svg)](https://www.magepal.com/guest-to-customer.html)
+[![GitHub forks](https://img.shields.io/github/forks/magepal/magento2-guest-to-customer.svg)](https://www.magepal.com/guest-to-customer.html)
+
+##### For Magento 2.0.x, 2.1.x, 2.2.x and 2.3.x
 
 In general E-commerce, shoppers do not like to create an account during checkout and often opt to checkout as a guest customer instead of a reguistered user. As a Magento store owner, if your online store sells products in various colors, sizes or other customizable items then you may be dealing with canceling and rewriting orders on a daily bases because of customers' change of heart after purchasing or they simply want to be able to get order status updates. Perfect for reordering or modifying existing order without having to manually copy all of your customer existing billing and shipping information.
 
@@ -23,20 +31,11 @@ A customer can also log into their existing customer's dashboard and enter any e
 composer require magepal/magento2-guest-to-customer
 ```
 
-##### Manual Installation
-To install Guest to Customer for Magento2
- * Download the extension
- * Unzip the file
- * Create a folder {Magento root}/app/code/MagePal/GuestToCustomer
- * Copy the content from the unzip folder
- * Flush cache
+## Documentation
 
-#### Step 2 -  Enable
- * php -f bin/magento module:enable --clear-static-content MagePal_GuestToCustomer
- * php -f bin/magento setup:upgrade
+ - [How to Install Guest to Customer for Magento](https://www.magepal.com/help/docs/guest-to-customer/#installation)
 
-#### Step 3 - Configuration
-Log into your Magento Admin, then goto Stores -> Configuration -> MagePal -> Guest To Customer
+ - [How to setup Guest to Customer for Magento 2](https://www.magepal.com/help/docs/guest-to-customer/#configuration)
 
 Contribution
 ---

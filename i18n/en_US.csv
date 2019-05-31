@@ -15,9 +15,14 @@
 "Unknown error please try again.","Unknown error please try again."
 "We can't find the order.","We can't find the order."
 "Convert to Customer","Convert to Customer"
-
-
-
-
-
-
+"Guest order converted by admin user: %s","Guest order converted by admin user: %s"
+"Customer with email address already exists","Customer with email address already exists"
+"Automatically add order to customer","Automatically add order to customer"
+"Automatically add order to existing customer with same email address.","Automatically add order to existing customer with same email address."
+"Merge Customer Details","Merge Customer Details"
+"Copy customer attributes to order (if customer already exists)","Copy customer attributes to order (if customer already exists)"
+"Customer Group","Customer Group"
+"Customer Name","Customer Name"
+"Date Of Birth","Date Of Birth"
+"Gender","Gender"
+"Tax VAT","Tax VAT"
