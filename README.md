@@ -10,7 +10,7 @@
 
 ##### For Magento 2.0.x, 2.1.x, 2.2.x and 2.3.x
 
-In general E-commerce, shoppers do not like to create an account during checkout and often opt to checkout as a guest customer instead of a reguistered user. As a Magento store owner, if your online store sells products in various colors, sizes or other customizable items then you may be dealing with canceling and rewriting orders on a daily bases because of customers' change of heart after purchasing or they simply want to be able to get order status updates. Perfect for reordering or modifying existing order without having to manually copy all of your customer existing billing and shipping information.
+In general E-commerce, shoppers do not like to create an account during checkout and often opt to checkout as a guest customer instead of a registered user. As a Magento store owner, if your online store sells products in various colors, sizes or other customizable items then you may be dealing with canceling and rewriting orders on a daily bases because of customers' change of heart after purchasing or they simply want to be able to get order status updates. Perfect for reordering or modifying existing order without having to manually copy all of your customer existing billing and shipping information.
 
 Our free Guest to Customer extension for Magento2 quickly and seamlessly convert any guest order and transferred all order and customer information over as a registered customer and notifying the user on how to access their newly created customer account.
 
@@ -48,8 +48,23 @@ If you encounter any problems or bugs, please open an issue on [GitHub](https://
 
 Need help setting up or want to customize this extension to meet your business needs? Please email support@magepal.com and if we like your idea we will add this feature for free or at a discounted rate.
 
-Top Magento 2.2 Extensions
+Magento 2 Extensions
 ---
-[Custom SMTP](https://www.magepal.com/magento2/extensions/custom-smtp.html) | [Google Tag Manager](https://www.magepal.com/magento2/extensions/google-tag-manager.html) | [Enhanced E-commerce](https://www.magepal.com/magento2/extensions/enhanced-ecommerce-for-google-tag-manager.html) | [Reindex](https://www.magepal.com/magento2/extensions/reindex.html) | [Custom Shipping Method](https://www.magepal.com/magento2/extensions/custom-shipping-rates-for-magento-2.html) | [Preview Order Confirmation](https://www.magepal.com/magento2/extensions/preview-order-confirmation-page-for-magento-2.html) | [Guest to Customer](https://www.magepal.com/magento2/extensions/guest-to-customer.html) | [Admin Form Fields Manager](https://www.magepal.com/magento2/extensions/admin-form-fields-manager-for-magento-2.html) | [Customer Dashboard Links Manager](https://www.magepal.com/magento2/extensions/customer-dashboard-links-manager-for-magento-2.html) | [Lazy Loader](https://www.magepal.com/magento2/extensions/lazy-load.html) | [Order Confirmation Page Miscellaneous Scripts](https://www.magepal.com/magento2/extensions/order-confirmation-miscellaneous-scripts-for-magento-2.html)
+- [Custom SMTP](https://www.magepal.com/magento2/extensions/custom-smtp.html)
+- [Catalog Hover Image for Magento](https://www.magepal.com/magento2/extensions/catalog-hover-image-for-magento.html)
+- [Enhanced Success Page for Magento 2](https://www.magepal.com/magento2/extensions/enhanced-success-page.html)
+- [Enhanced Transactional Emails for Magento 2](https://www.magepal.com/magento2/extensions/enhanced-transactional-emails.html)
+- [Google Tag Manager](https://www.magepal.com/magento2/extensions/google-tag-manager.html) 
+- [Enhanced E-commerce](https://www.magepal.com/magento2/extensions/enhanced-ecommerce-for-google-tag-manager.html) 
+- [Reindex](https://www.magepal.com/magento2/extensions/reindex.html) 
+- [Custom Shipping Method](https://www.magepal.com/magento2/extensions/custom-shipping-rates-for-magento-2.html) 
+- [Preview Order Confirmation](https://www.magepal.com/magento2/extensions/preview-order-confirmation-page-for-magento-2.html)
+- [Guest to Customer](https://www.magepal.com/magento2/extensions/guest-to-customer.html) 
+- [Admin Form Fields Manager](https://www.magepal.com/magento2/extensions/admin-form-fields-manager-for-magento-2.html) 
+- [Customer Dashboard Links Manager](https://www.magepal.com/magento2/extensions/customer-dashboard-links-manager-for-magento-2.html) 
+- [Lazy Loader](https://www.magepal.com/magento2/extensions/lazy-load.html) 
+- [Order Confirmation Page Miscellaneous Scripts](https://www.magepal.com/magento2/extensions/order-confirmation-miscellaneous-scripts-for-magento-2.html)
+- [HTML Minifier for Magento2](https://www.magepal.com/magento2/extensions/html-minifier.html)
+
 
 © MagePal LLC. | [www.magepal.com](https://www.magepal.com "Magento 2 Marketplace")
