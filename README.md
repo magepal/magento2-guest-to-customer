@@ -1,6 +1,6 @@
 <a href="https://www.magepal.com" title="Magento 2.0 Extensions" ><img src="https://image.ibb.co/dHBkYH/Magepal_logo.png" width="100" align="right" alt="Magento Extensions for Ecommerce" /></a>
 
-## Guest to Customer for Magento 2.0
+# Guest to Customer for Magento 2.0
 
 
 [![Total Downloads](https://poser.pugx.org/magepal/magento2-guest-to-customer/downloads)](https://www.magepal.com/guest-to-customer.html)
@@ -22,7 +22,7 @@ A customer can also log into their existing customer's dashboard and enter any e
 #### Sales Order Admin
 ![guest to customer - admin](https://image.ibb.co/jeOPtH/Sales_Order_Admin_Guest_to_Customer_for_Magento2.gif)
 
-## Installation
+### Installation
 
 #### Step 1
 ##### Using Composer (recommended)
@@ -31,7 +31,7 @@ A customer can also log into their existing customer's dashboard and enter any e
 composer require magepal/magento2-guest-to-customer
 ```
 
-## Documentation
+### Documentation
 
  - [How to Install Guest to Customer for Magento](https://www.magepal.com/help/docs/guest-to-customer/#installation)
 
