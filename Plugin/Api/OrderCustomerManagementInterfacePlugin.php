@@ -7,31 +7,34 @@
 
 namespace MagePal\GuestToCustomer\Plugin\Api;
 
+use Magento\Sales\Api\OrderCustomerManagementInterface;
+use MagePal\GuestToCustomer\Helper\Data;
+
 class OrderCustomerManagementInterfacePlugin
 {
     /**
-     * @var \MagePal\GuestToCustomer\Helper\Data
+     * @var Data
      */
     protected $helperData;
 
     /**
      * OrderCustomerManagementInterfacePlugin constructor.
-     * @param \MagePal\GuestToCustomer\Helper\Data $helperData
+     * @param Data $helperData
      */
     public function __construct(
-        \MagePal\GuestToCustomer\Helper\Data $helperData
+        Data $helperData
     ) {
         $this->helperData = $helperData;
     }
 
     /**
-     * @param \Magento\Sales\Api\OrderCustomerManagementInterface $subject
+     * @param OrderCustomerManagementInterface $subject
      * @param callable $proceed
      * @param $orderId
      * @return mixed
      */
     public function aroundCreate(
-        \Magento\Sales\Api\OrderCustomerManagementInterface $subject,
+        OrderCustomerManagementInterface $subject,
         callable $proceed,
         $orderId
     ) {
