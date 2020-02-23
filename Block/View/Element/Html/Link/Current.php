@@ -31,8 +31,8 @@ class Current extends \Magento\Framework\View\Element\Html\Link\Current
     public function __construct(
         Context $context,
         DefaultPathInterface $defaultPath,
-        array $data = [],
-        Data $helperData
+        Data $helperData,
+        array $data = []
     ) {
         parent::__construct($context, $defaultPath, $data);
         $this->helperData = $helperData;
