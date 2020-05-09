@@ -6,24 +6,20 @@
  */
 namespace MagePal\GuestToCustomer\Controller\Guesttocustomer;
 
+use Exception;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use MagePal\GuestToCustomer\Helper\Data;
 
-/**
- * Class LookupformPost
- * @package MagePal\GuestToCustomer\Controller\Guesttocustomer
- */
 class LookupformPost extends AbstractAccount
 {
     /**
@@ -91,42 +87,35 @@ class LookupformPost extends AbstractAccount
      */
     public function execute()
     {
-        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        if ($validFormKey
-            && $this->getRequest()->isPost()
-            && $incrementId = $this->getRequest()->getPost('order_increment')
-        ) {
+        if (!$this->helperData->isEnabledCustomerDashboard() || !$this->session->isLoggedIn()) {
+            $resultRedirect->setPath('customer/account/login');
+            return $resultRedirect;
+        }
+
+        $validFormKey = $this->formKeyValidator->validate($this->getRequest());
+        $incrementId = $this->getRequest()->getPost('order_increment');
+
+        if ($validFormKey && $this->getRequest()->isPost() && $incrementId) {
             $searchCriteria = $this->searchCriteriaBuilder->addFilter(
                 'increment_id',
                 $incrementId,
                 'eq'
             )->create();
 
-            $order = $this->orderRepository->getList($searchCriteria)->getFirstItem();
+            $orderList = $this->orderRepository->getList($searchCriteria);
 
-            if ($order->getId()) {
-                $customer = $this->session->getCustomerData();
+            if ($orderList->getTotalCount()) {
+                $order = current($orderList->getItems());
 
-                if (!$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
-                    $this->helperData->setCustomerData($order, $customer);
-
-                    $comment = sprintf(
-                        __("Guest order converted by customer: %s"),
-                        $customer->getEmail()
-                    );
-                    $order->addStatusHistoryComment($comment);
-
-                    $this->orderRepository->save($order);
-
-                    $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $incrementId);
-
-                    $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
-                } else {
-                    $this->messageManager->addErrorMessage(__('Order was not placed by you.'));
+                try {
+                    $customer = $this->session->getCustomerData();
+                    $this->addCustomerIdToOrder($customer, $order);
+                } catch (Exception $e) {
+                    $this->messageManager->addErrorMessage(__('Unknown error please try again.'));
                 }
+
             } else {
                 $this->messageManager->addErrorMessage(__('We can\'t find the order.'));
             }
@@ -138,21 +127,27 @@ class LookupformPost extends AbstractAccount
     }
 
     /**
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
-     * @throws NotFoundException
+     * @param CustomerInterface|false $customer
+     * @param  Order $order
      */
-    public function dispatch(RequestInterface $request)
+    protected function addCustomerIdToOrder($customer, $order)
     {
-        if (!$this->helperData->isEnabledCustomerDashboard() || !$this->session->isLoggedIn()) {
-            /** @var Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('customer/account/login');
+        if ($customer && !$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
+            $this->helperData->setCustomerData($order, $customer);
 
-            return $resultRedirect;
+            $comment = sprintf(
+                __("Guest order converted by customer: %s"),
+                $customer->getEmail()
+            );
+
+            $order->addStatusHistoryComment($comment);
+            $this->orderRepository->save($order);
+
+            $this->helperData->dispatchCustomerOrderLinkEvent($customer->getId(), $order->getIncrementId());
+
+            $this->messageManager->addSuccessMessage(__('Order was successfully added to your account'));
+        } else {
+            $this->messageManager->addErrorMessage(__('We are unable to find your order number, please try again.'));
         }
-
-        return parent::dispatch($request);
     }
 }

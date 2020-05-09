@@ -17,10 +17,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use MagePal\GuestToCustomer\Helper\Data;
 
-/**
- * Class Lookupform
- * @package MagePal\GuestToCustomer\Controller\Guesttocustomer
- */
 class Lookupform extends AbstractAccount
 {
     /**
@@ -64,32 +60,17 @@ class Lookupform extends AbstractAccount
      */
     public function execute()
     {
-        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        // $title = __('Guest to customer');
+
+        if (!$this->helperData->isEnabledCustomerDashboard() || !$this->session->isLoggedIn()) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('customer/account/login');
+            return $resultRedirect;
+        }
 
         $resultPage->getConfig()->getTitle()->set(__(''));
         $resultPage->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
 
         return $resultPage;
-    }
-
-    /**
-     * @param RequestInterface $request
-     *
-     * @return ResponseInterface
-     * @throws NotFoundException
-     */
-    public function dispatch(RequestInterface $request)
-    {
-        if (!$this->helperData->isEnabledCustomerDashboard() || !$this->session->isLoggedIn()) {
-            /** @var Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('customer/account/login');
-
-            return $resultRedirect;
-        }
-
-        return parent::dispatch($request);
     }
 }
