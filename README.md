@@ -10,11 +10,11 @@
 
 ##### For Magento 2.0.x, 2.1.x, 2.2.x and 2.3.x
 
-In general E-commerce, shoppers do not like to create an account during checkout and often opt to checkout as a guest customer instead of a registered user. As a Magento store owner, if your online store sells products in various colors, sizes or other customizable items then you may be dealing with canceling and rewriting orders on a daily bases because of customers' change of heart after purchasing or they simply want to be able to get order status updates. Perfect for reordering or modifying existing order without having to manually copy all of your customer existing billing and shipping information.
+In general E-commerce, shoppers do not like to create an account during checkout and often opt to checkout as a guest customer instead of a registered user. As a Magento store owner, if your online store sells products in various colors, sizes, or other customizable items then you may be dealing with canceling and rewriting orders on a daily bases because of customers' change of heart after purchasing or they simply want to be able to get order status updates. Perfect for reordering or modifying existing orders without having to manually copy all of your customer's existing billing and shipping information.
 
-Our free Guest to Customer extension for Magento2 quickly and seamlessly convert any guest order and transferred all order and customer information over as a registered customer and notifying the user on how to access their newly created customer account.
+Our free Guest to Customer extension for Magento2 quickly and seamlessly convert any guest order and transfers all order and customer information over as a registered customer and notifying the user on how to access their newly created customer account.
 
-A customer can also log into their existing customer's dashboard and enter any existing order that they place previously as a guest and link that order to there current customer profile providing that they use the same email address and has the order number available. 
+A customer can also log into their existing customer's dashboard and enter any existing order that they place previously as a guest and link that order to their current customer profile providing that they use the same email address and has the order number available. 
 
 #### Customer Dashboard
 ![guest to customer - frontend](https://image.ibb.co/d7qhfx/Customer_Dashboard_Guest_to_Customer_for_Magento2.gif)
