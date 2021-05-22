@@ -8,7 +8,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/magepal/magento2-guest-to-customer.svg)](https://www.magepal.com/guest-to-customer.html)
 [![GitHub forks](https://img.shields.io/github/forks/magepal/magento2-guest-to-customer.svg)](https://www.magepal.com/guest-to-customer.html)
 
-##### For Magento 2.0.x, 2.1.x, 2.2.x and 2.3.x
+##### For Magento 2.0.x, 2.1.x, 2.2.x, 2.3.x and 2.4.x
+
+<a href="https://www.magepal.com/magento2/extensions/guest-to-customer.html"><img src="https://www.magepal.com/media/catalog/product/g/u/guest-to-customer-magento.png" alt="Magento 2 customer" ></a>
 
 In general E-commerce, shoppers do not like to create an account during checkout and often opt to checkout as a guest customer instead of a registered user. As a Magento store owner, if your online store sells products in various colors, sizes, or other customizable items then you may be dealing with canceling and rewriting orders on a daily bases because of customers' change of heart after purchasing or they simply want to be able to get order status updates. Perfect for reordering or modifying existing orders without having to manually copy all of your customer's existing billing and shipping information.
 

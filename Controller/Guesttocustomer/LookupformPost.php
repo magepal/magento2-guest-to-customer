@@ -16,6 +16,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use MagePal\GuestToCustomer\Helper\Data;
@@ -128,11 +129,13 @@ class LookupformPost extends AbstractAccount
 
     /**
      * @param CustomerInterface|false $customer
-     * @param  Order $order
+     * @param  Order | OrderInterface $order
      */
     protected function addCustomerIdToOrder($customer, $order)
     {
-        if ($customer && !$order->getCustomerId() && $order->getCustomerEmail() === $customer->getEmail()) {
+        if ($customer && !$order->getCustomerId()
+            && strcasecmp($order->getCustomerEmail(), $customer->getEmail()) == 0
+        ) {
             $this->helperData->setCustomerData($order, $customer);
 
             $comment = sprintf(
