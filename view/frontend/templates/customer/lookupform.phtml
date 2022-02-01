@@ -7,39 +7,50 @@
 
 /**  @var $block MagePal\GuestToCustomer\Block\Customer\LookupForm */
 ?>
-
 <form class="form form-edit-account" 
-      action="<?= $block->escapeUrl($block->getUrl('customer/guesttocustomer/lookupformPost')) ?>" 
-      method="post" 
-      id="form-validate" 
-      data-mage-init='{"validation": {}}'
-      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>" 
-      autocomplete="off">
+    action="<?= $block->escapeUrl($block->getUrl('customer/guesttocustomer/lookupformPost')) ?>" 
+    method="post" 
+    id="form-validate" 
+    data-mage-init='{"validation": {}}'
+    data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>" 
+    autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
         <legend class="legend"><span><?= $block->escapeHtml(__('Guest Order Information')) ?></span></legend><br>
         <div class="field field-order-increment required">
             <label class="label" for="order-increment">
-                <span><?= __('Order Number') ?></span>
+                <span><?= $block->escapeHtml(__('Order Number')) ?></span>
             </label>
 
             <div class="control">
-                <input type="text" id="order-increment" name="order_increment" value="" title="Order Number" class="input-text required-entry" data-validate="{required:true}" aria-required="true">
+                <input type="text" 
+                    id="order-increment" 
+                    name="order_increment" 
+                    value="" 
+                    title="<?= $block->escapeHtmlAttr(__('Order Number')) ?>" 
+                    class="input-text required-entry" 
+                    data-validate="{required: true}" 
+                    aria-required="true">
             </div>
         </div>
         <div class="field field-email required">
             <label class="label" for="email">
-                <span><?= __('Email') ?></span>
+                <span><?= $block->escapeHtml(__('Email')) ?></span>
             </label>
 
             <div class="control">
-                <input type="text" id="email" name="email" value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>" title="First Name" class="input-text required-entry" data-validate="{required:true}" aria-required="true" disabled>
+                <input type="email" 
+                    id="email" 
+                    name="email" 
+                    value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>" 
+                    title="<?= $block->escapeHtmlAttr(__('Email')) ?>" 
+                    class="input-text" 
+                    disabled>
             </div>
         </div>
     </fieldset>
 
     <?= $block->getChildHtml('form_additional_info') ?>
-    
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>"><span><?= $block->escapeHtml(__('Save')) ?></span></button>
