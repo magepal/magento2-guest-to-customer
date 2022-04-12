@@ -15,10 +15,10 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderCustomerManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Model\App\Emulation;
 use MagePal\GuestToCustomer\Helper\Data;
 
 /**
@@ -63,6 +63,11 @@ class Index extends Action
     private $authSession;
 
     /**
+     * @var Emulation
+     */
+    private $emulation;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param OrderRepositoryInterface $orderRepository
@@ -81,7 +86,8 @@ class Index extends Action
         OrderCustomerManagementInterface $orderCustomerService,
         JsonFactory $resultJsonFactory,
         Session $authSession,
-        Data $helperData
+        Data $helperData,
+        Emulation $emulation
     ) {
         parent::__construct($context);
 
@@ -92,6 +98,7 @@ class Index extends Action
         $this->customerRepository = $customerRepository;
         $this->authSession = $authSession;
         $this->helperData = $helperData;
+        $this->emulation = $emulation;
     }
 
     /**
@@ -110,7 +117,9 @@ class Index extends Action
         if ($orderId && $order->getEntityId()) {
             try {
                 if ($this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
+                    $this->emulation->startEnvironmentEmulation($order->getStoreId(), 'adminhtml');
                     $customer = $this->orderCustomerService->create($orderId);
+                    $this->emulation->stopEnvironmentEmulation();
                 } elseif ($this->helperData->isMergeIfCustomerAlreadyExists()) {
                     $customer = $this->customerRepository->get($order->getCustomerEmail());
                 } else {
@@ -153,6 +162,11 @@ class Index extends Action
         return $this->_authorization->isAllowed('MagePal_GuestToCustomer::guesttocustomer');
     }
 
+    /**
+     * @param $hasError
+     * @param $message
+     * @return array
+     */
     protected function getMessage($hasError, $message)
     {
         return [
