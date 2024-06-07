@@ -1,4 +1,14 @@
-<script>
+<?php
+/**
+ * Copyright © MagePal. All rights reserved.
+ * See COPYING.txt for license details.
+ * https://www.magepal.com | support@magepal.com
+ */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer **/
+?>
+
+<?php $scriptString = <<<script
     require([
         "jquery",
         "mage/mage"
@@ -6,4 +16,6 @@
         var dataForm = $('#form-validate');
         dataForm.mage('validation', {});
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
