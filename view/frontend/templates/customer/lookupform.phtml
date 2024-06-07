@@ -5,7 +5,8 @@
  * https://www.magepal.com | support@magepal.com
  */
 
-/**  @var $block MagePal\GuestToCustomer\Block\Customer\LookupForm */
+/** @var $block MagePal\GuestToCustomer\Block\Customer\LookupForm */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <form class="form form-edit-account" action="<?= $block->escapeUrl($block->getUrl('customer/guesttocustomer/lookupformPost')) ?>" method="post" id="form-validate" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>" autocomplete="off">
@@ -42,14 +43,14 @@
         </div>
     </div>
 </form>
-<script>
+<?php $scriptString = <<<script
     require([
         "jquery",
         "mage/mage"
     ], function($){
         var dataForm = $('#form-validate');
-
         dataForm.mage('validation', {});
-
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
