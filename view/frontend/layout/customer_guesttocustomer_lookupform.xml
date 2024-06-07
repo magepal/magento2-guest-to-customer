@@ -12,14 +12,14 @@
         <css src="MagePal_GuestToCustomer::css/styles.css" />
     </head>
     <body>
-        <!--referenceBlock name="page.main.title">
-            <action method="setPageTitle">
-                <argument translate="true" name="title" xsi:type="string">Guest Order Information</argument>
-            </action>
-        </referenceBlock-->
         <referenceContainer name="content">
-            <block class="MagePal\GuestToCustomer\Block\Customer\LookupForm" name="customer_edit" template="MagePal_GuestToCustomer::customer/lookupform.phtml" cacheable="false">
+            <block class="MagePal\GuestToCustomer\Block\Customer\LookupForm"
+                   name="customer_edit" template="MagePal_GuestToCustomer::customer/lookupform.phtml" cacheable="false">
                 <container name="form.additional.info" as="form_additional_info"/>
+                <container name="content.body.end" as="content_body_end">
+                    <block class="Magento\Framework\View\Element\Template" name="customer_form_validation"
+                           template="MagePal_GuestToCustomer::customer/validation.phtml" cacheable="false" />
+                </container>
             </block>
         </referenceContainer>
     </body>

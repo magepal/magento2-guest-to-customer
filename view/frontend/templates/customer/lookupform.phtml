@@ -5,21 +5,28 @@
  * https://www.magepal.com | support@magepal.com
  */
 
-/** @var $block MagePal\GuestToCustomer\Block\Customer\LookupForm */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**  @var $block MagePal\GuestToCustomer\Block\Customer\LookupForm */
 ?>
 
-<form class="form form-edit-account" action="<?= $block->escapeUrl($block->getUrl('customer/guesttocustomer/lookupformPost')) ?>" method="post" id="form-validate" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>" autocomplete="off">
+<form class="form form-edit-account"
+      action="<?= $block->escapeUrl($block->getUrl('customer/guesttocustomer/lookupformPost')) ?>"
+      method="post" id="form-validate"
+      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+      autocomplete="off" >
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
-        <legend class="legend"><span><?= $block->escapeHtml(__('Guest Order Information')) ?></span></legend><br>
+        <legend class="legend">
+            <span><?= $block->escapeHtml(__('Guest Order Information')) ?></span>
+        </legend><br>
         <div class="field field-order-increment required">
             <label class="label" for="order-increment">
                 <span><?= __('Order Number') ?></span>
             </label>
 
             <div class="control">
-                <input type="text" id="order-increment" name="order_increment" value="" title="Order Number" class="input-text required-entry" data-validate="{required:true}" aria-required="true">
+                <input type="text" id="order-increment" name="order_increment" value=""
+                       title="Order Number" class="input-text required-entry"
+                       data-validate="{required:true}" aria-required="true" <?= $block->getIsHyva() ? 'required' : '' ?> >
             </div>
         </div>
         <div class="field field-email required">
@@ -28,29 +35,30 @@
             </label>
 
             <div class="control">
-                <input type="text" id="email" name="email" value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>" title="First Name" class="input-text required-entry" data-validate="{required:true}" aria-required="true" disabled>
+                <input type="text" id="email" name="email"
+                       value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
+                       title="First Name" class="input-text required-entry" data-validate="{required:true}"
+                       aria-required="true" disabled>
             </div>
         </div>
     </fieldset>
 
     <?= $block->getChildHtml('form_additional_info') ?>
+
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>"><span><?= $block->escapeHtml(__('Save')) ?></span></button>
+            <button type="submit" class="action save primary"
+                    title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
+                <span><?= $block->escapeHtml(__('Save')) ?></span>
+            </button>
         </div>
         <div class="secondary">
-            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Go back')) ?></span></a>
+            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $block->escapeHtml(__('Go back')) ?></span>
+            </a>
         </div>
     </div>
 </form>
-<?php $scriptString = <<<script
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($){
-        var dataForm = $('#form-validate');
-        dataForm.mage('validation', {});
-    });
-script;
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+
+<?= $block->getChildHtml('content_body_end') ?>
+
