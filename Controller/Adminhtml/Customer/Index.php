@@ -11,14 +11,16 @@ use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderCustomerManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\StoreManagerInterface;
 use MagePal\GuestToCustomer\Helper\Data;
 
 /**
@@ -31,11 +33,6 @@ class Index extends Action
      * @var OrderRepositoryInterface
      */
     protected $orderRepository;
-
-    /**
-     * @var AccountManagementInterface
-     */
-    protected $accountManagement;
 
     /**
      * @var CustomerRepositoryInterface
@@ -68,10 +65,14 @@ class Index extends Action
     private $emulation;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param OrderRepositoryInterface $orderRepository
-     * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param OrderCustomerManagementInterface $orderCustomerService
      * @param JsonFactory $resultJsonFactory
@@ -81,12 +82,12 @@ class Index extends Action
     public function __construct(
         Context $context,
         OrderRepositoryInterface $orderRepository,
-        AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository,
         OrderCustomerManagementInterface $orderCustomerService,
         JsonFactory $resultJsonFactory,
         Session $authSession,
         Data $helperData,
+        StoreManagerInterface $storeManager,
         Emulation $emulation
     ) {
         parent::__construct($context);
@@ -94,11 +95,11 @@ class Index extends Action
         $this->orderRepository = $orderRepository;
         $this->orderCustomerService = $orderCustomerService;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
         $this->authSession = $authSession;
         $this->helperData = $helperData;
         $this->emulation = $emulation;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -116,7 +117,9 @@ class Index extends Action
 
         if ($orderId && $order->getEntityId()) {
             try {
-                if ($this->accountManagement->isEmailAvailable($order->getCustomerEmail())) {
+                //get website id from order
+
+                if ($this->isEmailAvailable($order->getCustomerEmail(), $order->getStore()->getWebsiteId())) {
                     $this->emulation->startEnvironmentEmulation($order->getStoreId(), 'adminhtml');
                     $customer = $this->orderCustomerService->create($orderId);
                     $this->emulation->stopEnvironmentEmulation();
@@ -149,6 +152,27 @@ class Index extends Action
             }
         } else {
             return $resultJson->setData($this->getMessage(true, 'Invalid order id.'));
+        }
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param string $customerEmail
+     * @param int|null $websiteId
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function isEmailAvailable($customerEmail, $websiteId = null)
+    {
+        try {
+            if ($websiteId === null) {
+                $websiteId = $this->storeManager->getStore()->getWebsiteId();
+            }
+            $this->customerRepository->get($customerEmail, $websiteId);
+            return false;
+        } catch (NoSuchEntityException $e) {
+            return true;
         }
     }
 
