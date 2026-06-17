@@ -10,4 +10,8 @@
         <observer name="magepal_guest_to_customer_save_downloadable_product"
                   instance="MagePal\GuestToCustomer\Observer\UpdateDownloadableProductObserver" />
     </event>
+    <event name="sales_order_place_after">
+        <observer name="magepal_guest_to_customer_sales_order_place_after"
+                  instance="MagePal\GuestToCustomer\Observer\SalesOrderPlaceAfterObserver" />
+    </event>
 </config>
