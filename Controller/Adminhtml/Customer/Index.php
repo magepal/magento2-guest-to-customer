@@ -118,13 +118,14 @@ class Index extends Action
         if ($orderId && $order->getEntityId()) {
             try {
                 //get website id from order
+                $websiteId = $order->getStore()->getWebsiteId();
 
-                if ($this->isEmailAvailable($order->getCustomerEmail(), $order->getStore()->getWebsiteId())) {
+                if ($this->isEmailAvailable($order->getCustomerEmail(), $websiteId)) {
                     $this->emulation->startEnvironmentEmulation($order->getStoreId(), 'adminhtml');
                     $customer = $this->orderCustomerService->create($orderId);
                     $this->emulation->stopEnvironmentEmulation();
                 } elseif ($this->helperData->isMergeIfCustomerAlreadyExists()) {
-                    $customer = $this->customerRepository->get($order->getCustomerEmail());
+                    $customer = $this->customerRepository->get($order->getCustomerEmail(), $websiteId);
                 } else {
                     return $resultJson->setData(
                         $this->getMessage(true, 'Customer with email address already exists')
