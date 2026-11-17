@@ -26,7 +26,7 @@
         }
     ],
     "require": {
-        "php": "~8.3.0|~8.4.0|~8.5.0",
+        "php": "~8.2.0|~8.3.0|~8.4.0|~8.5.0",
         "magento/module-backend": "102.0.*",
         "magento/framework": "103.0.*",
         "magepal/magento2-core": ">=1.1.14"
