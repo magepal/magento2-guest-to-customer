@@ -26,7 +26,7 @@
         }
     ],
     "require": {
-        "php": "~8.3.0|~8.4.0|~8.5.0",
+        "php": "~8.2.0|~8.3.0|~8.4.0|~8.5.0",
         "magento/module-backend": "102.0.*",
         "magento/framework": "103.0.*",
         "magepal/magento2-core": ">=1.1.14"
@@ -39,6 +39,18 @@
         ],
         "psr-4": {
             "MagePal\\GuestToCustomer\\": ""
+        }
+    },
+    "require-dev": {
+        "magento/magento-coding-standard": "^41",
+        "phpstan/phpstan": "^2.1",
+        "bitexpert/phpstan-magento": "^0.44",
+        "phpstan/extension-installer": "^1.4"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
         }
     }
 }

@@ -9,6 +9,7 @@ namespace MagePal\GuestToCustomer\Observer;
 
 use Exception;
 use Magento\Downloadable\Model\Link\PurchasedFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased as PurchasedResource;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -24,12 +25,20 @@ class UpdateDownloadableProductObserver implements ObserverInterface
     protected $purchasedFactory;
 
     /**
+     * @var PurchasedResource
+     */
+    protected $purchasedResource;
+
+    /**
      * @param PurchasedFactory $purchasedFactory
+     * @param PurchasedResource $purchasedResource
      */
     public function __construct(
-        PurchasedFactory $purchasedFactory
+        PurchasedFactory $purchasedFactory,
+        PurchasedResource $purchasedResource
     ) {
         $this->purchasedFactory = $purchasedFactory;
+        $this->purchasedResource = $purchasedResource;
     }
 
     /**
@@ -43,14 +52,16 @@ class UpdateDownloadableProductObserver implements ObserverInterface
 
         try {
             if ($incrementId && $customerId) {
-                $purchased = $this->purchasedFactory->create()->load(
+                $purchased = $this->purchasedFactory->create();
+                $this->purchasedResource->load(
+                    $purchased,
                     $incrementId,
                     'order_increment_id'
                 );
 
                 if ($purchased->getId()) {
                     $purchased->setCustomerId($customerId);
-                    $purchased->save();
+                    $this->purchasedResource->save($purchased);
                 }
             }
         } catch (Exception $e) {
